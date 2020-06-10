@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chryl.mapper.UserMapper">
+    <resultMap id="userMap" type="com.chryl.po.ChrUser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="is_use" jdbcType="INTEGER" property="isUse"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+    </resultMap>
+    <!-- 根据用户名查询用户信息 -->
+    <select id="selectUserByUName" resultMap="userMap" parameterType="string">
+        SELECT * FROM chr_user u WHERE u.username = #{uName}
+    </select>
+    <!-- 获取所有的用户列表 -->
+    <select id="getAllUsers" resultType="com.chryl.po.ChrUser">
+        SELECT username FROM chr_user u
+    </select>
+
+</mapper>
