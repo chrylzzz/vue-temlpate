@@ -3,6 +3,7 @@ package com.chryl.po;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 /**
  * Created by Chr.yl on 2020/6/10.
@@ -23,5 +24,11 @@ public class ChrGoods {
 
     @Column(name = "goods_price")
     private String goodsPrice;
+
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+
+    @Column(name = "goods_color")
+    private String goodsColor;
 
 }

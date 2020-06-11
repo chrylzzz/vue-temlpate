@@ -1,5 +1,6 @@
 package com.chryl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chryl.core.exception.ResponseException;
 import com.chryl.core.response.ReturnResult;
@@ -8,13 +9,16 @@ import com.chryl.po.ChrUser;
 import com.chryl.service.RoleService;
 import com.chryl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.PipedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * vue-admin 接口
@@ -29,6 +33,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     Map<String, ChrUser> tokenMap = new HashMap<>();
 
@@ -37,9 +43,12 @@ public class UserController {
     public Object validateLogin(@RequestBody ChrUser chrUser, HttpServletResponse response) throws ResponseException {
         String token = "9888a28586104f57970ec7c5666989a6";
         Map<String, Object> resMap = new HashMap<>();
-        //模拟redis存储
+
         ChrUser chrUser1 = userService.selectUserByUName(chrUser.getUsername(), chrUser.getPassword());
-        tokenMap.put(token, chrUser1);
+        //redis存储用户信息
+//        tokenMap.put(token, chrUser1);
+        String userJsonStr = JSON.toJSONString(chrUser1);
+        stringRedisTemplate.opsForValue().set(token, userJsonStr, 7, TimeUnit.DAYS);
         resMap.put("token", token);
         resMap.put("code", "200");
         resMap.put("status", "success");
@@ -49,7 +58,10 @@ public class UserController {
 
     @GetMapping("/info")
     public Object getInfo(String token) throws ResponseException {
-        ChrUser chrUser = tokenMap.get(token);
+
+        //模拟验证cookie成功,从redis获取user信息返回
+//        ChrUser chrUser = tokenMap.get(token);
+        ChrUser chrUser = JSON.parseObject(stringRedisTemplate.opsForValue().get(token), ChrUser.class);
         ChrRole chrRole = roleService.getRoleInfoByUserId(chrUser.getId());
         if (chrRole == null) {
             return ReturnResult.create(500, "gogogo");
@@ -67,7 +79,8 @@ public class UserController {
 
     @GetMapping("/getAllUser")
     public Object getAllUser(String token) throws ResponseException {
-        if (!tokenMap.get("token").equals(token)) {
+//        if (!tokenMap.get("token").equals(token)) {
+        if (!"9888a28586104f57970ec7c5666989a6".equals(token)) {
             return ReturnResult.create(null);
         }
         List<ChrUser> userList = userService.getAllUsers();

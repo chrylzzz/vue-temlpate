@@ -13,4 +13,6 @@ public interface GoodsMapper {
 
     List<ChrGoods> getAllGoods();
 
+    List<ChrGoods> goodsList();
+
 }

@@ -5,9 +5,16 @@
         <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
         <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
         <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
+        <result column="goods_color" jdbcType="VARCHAR" property="goodsColor"/>
+        <result column="release_date" jdbcType="DATE" property="releaseDate"/>
     </resultMap>
 
     <select id="getAllGoods" resultMap="goodsMap">
+        SELECT * FROM chr_goods LIMIT 0,5
+    </select>
+
+
+    <select id="goodsList" resultMap="goodsMap">
         SELECT * FROM chr_goods
     </select>
 

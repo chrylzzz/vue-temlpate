@@ -31,8 +31,8 @@ public class GoodsController {
 
 
     @GetMapping("/list")
-    public Object list() {
-        return ReturnResult.create(goodsService.getAllGoods());
+    public Object list(Integer page, Integer limit) {
+        return ReturnResult.create(goodsService.goodsList(page,limit));
     }
 
     //img
