@@ -6,16 +6,67 @@
         <result column="goods_name" jdbcType="VARCHAR" property="goodsName"/>
         <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
         <result column="goods_color" jdbcType="VARCHAR" property="goodsColor"/>
+        <result column="goods_type" jdbcType="VARCHAR" property="goodsType"/>
+        <result column="goods_status" jdbcType="VARCHAR" property="goodsStatus"/>
+        <result column="goods_desc" jdbcType="VARCHAR" property="goodsDesc"/>
+        <result column="goods_imp" jdbcType="INTEGER" property="goodsImp"/>
         <result column="release_date" jdbcType="DATE" property="releaseDate"/>
     </resultMap>
-
+    <!-- pie echarets -->
     <select id="getAllGoods" resultMap="goodsMap">
         SELECT * FROM chr_goods LIMIT 0,5
     </select>
 
-
-    <select id="goodsList" resultMap="goodsMap">
+    <!-- 数据列表 -->
+    <select id="goodsList" resultMap="goodsMap" parameterType="com.chryl.po.ChrGoods">
         SELECT * FROM chr_goods
+        <where>
+            <if test="chrGoods != null">
+                <if test="chrGoods.goodsType !=null and chrGoods.goodsType !=''">
+                    AND goods_type = #{chrGoods.goodsType}
+                </if>
+                <if test="chrGoods.goodsColor !=null and chrGoods.goodsColor !=''">
+                    AND goods_color = #{chrGoods.goodsColor}
+                </if>
+                <if test="chrGoods.goodsName !=null and chrGoods.goodsName !=''">
+                    AND goods_name LIKE CONCAT(#{chrGoods.goodsName},'%')
+                </if>
+            </if>
+        </where>
     </select>
 
+    <!-- 查询框 -->
+    <!-- 商品类型 -->
+    <select id="queryConditions2GoodsType" resultType="map">
+        SELECT goods_type FROM chr_goods GROUP BY goods_type
+    </select>
+    <!-- 添加 -->
+    <insert id="saveGoods" parameterType="com.chryl.po.ChrGoods">
+        INSERT INTO chr_goods
+        (goods_name,goods_price,release_date,goods_color,goods_type,goods_status,goods_imp,goods_desc)
+        VALUES
+        (
+        #{chrGoods.goodsName},
+        #{chrGoods.goodsPrice},
+        #{chrGoods.releaseDate},
+        #{chrGoods.goodsColor},
+        #{chrGoods.goodsType},
+        #{chrGoods.goodsStatus},
+        #{chrGoods.goodsImp},
+        #{chrGoods.goodsDesc}
+        )
+    </insert>
+    <!-- 修改 -->
+    <update id="updateChrGoods" parameterType="com.chryl.po.ChrGoods">
+        UPDATE chr_goods SET
+        goods_name = #{chrGoods.goodsName},
+        goods_price = #{chrGoods.goodsPrice},
+        release_date = #{chrGoods.releaseDate},
+        goods_color = #{chrGoods.goodsColor},
+        goods_type = #{chrGoods.goodsType},
+        goods_status = #{chrGoods.goodsStatus},
+        goods_imp = #{chrGoods.goodsImp},
+        goods_desc = #{chrGoods.goodsDesc}
+        WHERE goods_id = #{chrGoods.goodsId}
+    </update>
 </mapper>

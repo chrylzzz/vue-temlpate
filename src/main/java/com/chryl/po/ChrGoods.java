@@ -31,4 +31,15 @@ public class ChrGoods {
     @Column(name = "goods_color")
     private String goodsColor;
 
+    @Column(name = "goods_type")
+    private String goodsType;
+
+    @Column(name = "goods_status")
+    private String goodsStatus;
+
+    @Column(name = "goods_imp")
+    private Integer goodsImp;
+
+    @Column(name = "goods_desc")
+    private String goodsDesc;
 }

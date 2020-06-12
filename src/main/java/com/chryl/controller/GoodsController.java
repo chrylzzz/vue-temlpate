@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chryl.core.response.ReturnResult;
 import com.chryl.po.ChrGoods;
 import com.chryl.service.GoodsService;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
+import com.chryl.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Chr.yl on 2020/6/10.
@@ -29,10 +31,37 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @PostMapping("/create")
+    public Object create(@RequestBody ChrGoods chrGoods) {
+        boolean res = goodsService.createChrGoods(chrGoods);
+        if (res) {
+            return ReturnResult.create(HttpStatus.OK);
+        }
+        return ReturnResult.create(null);
+    }
 
+    @PostMapping("/update")
+    public Object update(@RequestBody ChrGoods chrGoods) {
+        boolean res = goodsService.updateChrGoods(chrGoods);
+        if (res) {
+            return ReturnResult.create(HttpStatus.OK);
+        }
+        return ReturnResult.create(null);
+    }
+
+    //数据列表
     @GetMapping("/list")
-    public Object list(Integer page, Integer limit) {
-        return ReturnResult.create(goodsService.goodsList(page,limit));
+    public Object list(PageVo page, ChrGoods chrGoods) {
+//    public Object list(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
+        return ReturnResult.create(goodsService.goodsList(page, chrGoods));
+//        return ReturnResult.create(goodsService.goodsList(page, limit));
+    }
+
+    //获取查询框的查询条件
+    @GetMapping("/conditions")
+    public Object conditions() {
+        List<Map<String, String>> queryConditions = goodsService.queryConditions();
+        return ReturnResult.create(queryConditions);
     }
 
     //img
