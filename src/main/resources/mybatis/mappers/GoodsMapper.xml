@@ -28,6 +28,9 @@
                 <if test="chrGoods.goodsColor !=null and chrGoods.goodsColor !=''">
                     AND goods_color = #{chrGoods.goodsColor}
                 </if>
+                <if test="chrGoods.releaseDate !=null">
+                    AND release_date = #{chrGoods.releaseDate}
+                </if>
                 <if test="chrGoods.goodsName !=null and chrGoods.goodsName !=''">
                     AND goods_name LIKE CONCAT(#{chrGoods.goodsName},'%')
                 </if>
@@ -69,4 +72,20 @@
         goods_desc = #{chrGoods.goodsDesc}
         WHERE goods_id = #{chrGoods.goodsId}
     </update>
+
+    <!-- 修改发布状态 -->
+    <update id="changeGoodsStatus" parameterType="com.chryl.po.ChrGoods">
+        <if test="chrGoods != null">
+            <if test="chrGoods.goodsStatus !=null and chrGoods.goodsStatus !='' and chrGoods.goodsId !=null and chrGoods.goodsId !=''">
+                UPDATE chr_goods SET goods_status = #{chrGoods.goodsStatus} WHERE goods_id = #{chrGoods.goodsId}
+            </if>
+        </if>
+    </update>
+
+    <!-- 删除 deleteGoods -->
+    <delete id="deleteGoods" parameterType="string">
+        <if test="goodsId !=null and goodsId !=''">
+            DELETE FROM chr_goods WHERE goods_id = #{goodsId}
+        </if>
+    </delete>
 </mapper>

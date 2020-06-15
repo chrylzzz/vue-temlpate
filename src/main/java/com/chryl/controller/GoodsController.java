@@ -40,6 +40,12 @@ public class GoodsController {
         return ReturnResult.create(null);
     }
 
+    /**
+     * 问题遗留: 后端接受的时间为格林威治时间,无法转化为北京时间
+     *
+     * @param chrGoods
+     * @return
+     */
     @PostMapping("/update")
     public Object update(@RequestBody ChrGoods chrGoods) {
         boolean res = goodsService.updateChrGoods(chrGoods);
@@ -62,6 +68,27 @@ public class GoodsController {
     public Object conditions() {
         List<Map<String, String>> queryConditions = goodsService.queryConditions();
         return ReturnResult.create(queryConditions);
+    }
+
+    //修改商品的发布状态
+    @PostMapping("/changeGoodsStatus")
+    public ReturnResult changeGoodsStatus(@RequestBody ChrGoods chrGoods) {
+//    public ReturnResult changeGoodsStatus( ChrGoodsModel chrGoods) {
+        boolean res = goodsService.changeGoodsStatus(chrGoods);
+        if (res) {
+            return ReturnResult.create(HttpStatus.OK);
+        }
+        return ReturnResult.create(null);
+    }
+
+    //删除
+    @DeleteMapping("/deleteGoods/{goodsId}")
+    public ReturnResult deleteGoods(@PathVariable String goodsId) {
+        boolean res = goodsService.deleteGoods(goodsId);
+        if (res) {
+            return ReturnResult.create(HttpStatus.OK);
+        }
+        return ReturnResult.create(null);
     }
 
     //img

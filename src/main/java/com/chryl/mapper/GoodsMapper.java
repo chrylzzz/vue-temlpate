@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Repository
 public interface GoodsMapper
-//        extends JpaRepository<ChrGoods, Integer>
+//        extends JpaRepository<ChrGoodsModel, Integer>
 {
 
     List<ChrGoods> getAllGoods();
@@ -27,4 +27,8 @@ public interface GoodsMapper
     int saveGoods(@Param("chrGoods") ChrGoods chrGoods);
 
     int updateChrGoods(@Param("chrGoods") ChrGoods chrGoods);
+
+    int changeGoodsStatus(@Param("chrGoods") ChrGoods chrGoods);
+
+    int deleteGoods(@Param("goodsId") String goodsId);
 }

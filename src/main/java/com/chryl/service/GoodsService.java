@@ -89,4 +89,26 @@ public class GoodsService {
         }
         return false;
     }
+
+    public boolean changeGoodsStatus(ChrGoods chrGoods) {
+        if (StringUtils.isBlank(String.valueOf(chrGoods.getGoodsId())) || StringUtils.isBlank(chrGoods.getGoodsStatus())) {
+            return false;
+        }
+        int i = goodsMapper.changeGoodsStatus(chrGoods);
+        if (i == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean deleteGoods(String goodsId) {
+        if (StringUtils.isBlank(goodsId)) {
+            return false;
+        }
+        int i = goodsMapper.deleteGoods(goodsId);
+        if (i == 1) {
+            return true;
+        }
+        return false;
+    }
 }
