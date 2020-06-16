@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.chryl.core.response.ReturnResult;
 import com.chryl.po.ChrGoods;
 import com.chryl.service.GoodsService;
+import com.chryl.vo.GoodsVo;
 import com.chryl.vo.PageVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -56,17 +58,24 @@ public class GoodsController {
     }
 
     /**
-     * 问题遗留:注意这里接收多选框为成功,后端改为json,前端也需要改
+     * 问题遗留:注意这里,使用form-data接收多选框的数据时不成功,暂时使用json格式接收即可解决
      *
      * @param page
      * @param chrGoods
      * @return
      */
     //数据列表
+//    @PostMapping("/list")
+//    public Object list(PageVo page, ChrGoods chrGoods) {
+//        return ReturnResult.create(goodsService.goodsList(page, chrGoods));
+//    }
     @PostMapping("/list")
-    public Object list(PageVo page, ChrGoods chrGoods) {
-        return ReturnResult.create(goodsService.goodsList(page, chrGoods));
+    public Object list(@RequestBody GoodsVo goodsVo) {ChrGoods chrGoods = new ChrGoods();
+        BeanUtils.copyProperties(goodsVo, chrGoods);
+        PageVo pageVo=new PageVo(goodsVo.getPage(),goodsVo.getLimit());
+        return ReturnResult.create(goodsService.goodsList(pageVo, chrGoods));
     }
+
 
     //获取查询框的查询条件
     @GetMapping("/conditions")
