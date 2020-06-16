@@ -56,7 +56,7 @@ public class GoodsController {
     }
 
     /**
-     * 问题遗留:注意这里接收多选框为成功
+     * 问题遗留:注意这里接收多选框为成功,后端改为json,前端也需要改
      *
      * @param page
      * @param chrGoods
