@@ -98,6 +98,7 @@ public class GoodsController {
         return ReturnResult.create(null);
     }
 
+    //展示图片
     @GetMapping("/showimg")
     public void showimg(@RequestParam(required = false) String path, HttpServletResponse response) {
         if (path == null || path.trim().length() == 0) {

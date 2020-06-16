@@ -8,16 +8,15 @@ import com.chryl.po.ChrRole;
 import com.chryl.po.ChrUser;
 import com.chryl.service.RoleService;
 import com.chryl.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.PipedReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +40,8 @@ public class UserController {
     //验证用户信息
     @PostMapping("/login")
     public Object validateLogin(@RequestBody ChrUser chrUser, HttpServletResponse response) throws ResponseException {
-        String token = "9888a28586104f57970ec7c5666989a6";
+//        String token = "9888a28586104f57970ec7c5666989a6";
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
         Map<String, Object> resMap = new HashMap<>();
 
         ChrUser chrUser1 = userService.selectUserByUName(chrUser.getUsername(), chrUser.getPassword());
@@ -52,6 +52,7 @@ public class UserController {
         resMap.put("token", token);
         resMap.put("code", "200");
         resMap.put("status", "success");
+//        resMap.put("avatar", "/Users/chryl/upload/20200616/f778738c-e4f8-4870-b634-56703b4acafe.gif");//头像
         response.setHeader("my-Header", "123");
         return ReturnResult.create(resMap);
     }
@@ -80,11 +81,25 @@ public class UserController {
     @GetMapping("/getAllUser")
     public Object getAllUser(String token) throws ResponseException {
 //        if (!tokenMap.get("token").equals(token)) {
-        if (!"9888a28586104f57970ec7c5666989a6".equals(token)) {
+        if (StringUtils.isBlank(token)) {
             return ReturnResult.create(null);
         }
         List<ChrUser> userList = userService.getAllUsers();
         return ReturnResult.create(userList);
+    }
+
+    @PostMapping("/logout")
+    public ReturnResult logout(String token) {
+        //删除 redis token
+        if (StringUtils.isBlank(token)) {
+            return ReturnResult.create(null);
+        }
+        Boolean delete = stringRedisTemplate.delete(token);
+        if (delete) {
+            return ReturnResult.create(HttpStatus.OK);
+        } else {
+            return ReturnResult.create(null);
+        }
     }
 
 }

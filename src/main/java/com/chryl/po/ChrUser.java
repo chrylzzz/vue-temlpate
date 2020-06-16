@@ -42,8 +42,11 @@ public class ChrUser implements Serializable {
     private Integer age;
 
     @Column(name = "is_use")
-    private Integer isUse;
+    private Integer isUse;//是否使用
 
     @Column(name = "create_time")
     private LocalDateTime createTime;
+
+    @Column(name = "avatar")
+    private String avatar;//头像
 }
