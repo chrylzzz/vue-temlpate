@@ -55,12 +55,17 @@ public class GoodsController {
         return ReturnResult.create(null);
     }
 
+    /**
+     * 注意这里接收多选框为成功
+     *
+     * @param page
+     * @param chrGoods
+     * @return
+     */
     //数据列表
-    @GetMapping("/list")
+    @PostMapping("/list")
     public Object list(PageVo page, ChrGoods chrGoods) {
-//    public Object list(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit) {
         return ReturnResult.create(goodsService.goodsList(page, chrGoods));
-//        return ReturnResult.create(goodsService.goodsList(page, limit));
     }
 
     //获取查询框的查询条件
@@ -91,7 +96,7 @@ public class GoodsController {
         return ReturnResult.create(null);
     }
 
-    //img
+    //上传
     @PostMapping("/upload")
     public Object upload(List<MultipartFile> fileList) {
 

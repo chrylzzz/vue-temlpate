@@ -11,6 +11,4 @@ import lombok.Data;
 public class PageVo {
     private Integer page;
     private Integer limit;
-
-
 }
