@@ -35,8 +35,6 @@ public class UserController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    Map<String, ChrUser> tokenMap = new HashMap<>();
-
     //验证用户信息
     @PostMapping("/login")
     public Object validateLogin(@RequestBody ChrUser chrUser, HttpServletResponse response) throws ResponseException {
@@ -46,23 +44,19 @@ public class UserController {
 
         ChrUser chrUser1 = userService.selectUserByUName(chrUser.getUsername(), chrUser.getPassword());
         //redis存储用户信息
-//        tokenMap.put(token, chrUser1);
         String userJsonStr = JSON.toJSONString(chrUser1);
-        stringRedisTemplate.opsForValue().set(token, userJsonStr, 7, TimeUnit.DAYS);
+//        stringRedisTemplate.opsForValue().set(token, userJsonStr, 7, TimeUnit.DAYS);//模拟redis
         resMap.put("token", token);
         resMap.put("code", "200");
         resMap.put("status", "success");
-//        resMap.put("avatar", "/Users/chryl/upload/20200616/f778738c-e4f8-4870-b634-56703b4acafe.gif");//头像
         response.setHeader("my-Header", "123");
         return ReturnResult.create(resMap);
     }
 
     @GetMapping("/info")
     public Object getInfo(String token) throws ResponseException {
-
-        //模拟验证cookie成功,从redis获取user信息返回
-//        ChrUser chrUser = tokenMap.get(token);
-        ChrUser chrUser = JSON.parseObject(stringRedisTemplate.opsForValue().get(token), ChrUser.class);
+        ChrUser chrUser = userService.selectUserByUName("admin", "111111");//模拟redis
+//        ChrUser chrUser = JSON.parseObject(stringRedisTemplate.opsForValue().get(token), ChrUser.class);
         ChrRole chrRole = roleService.getRoleInfoByUserId(chrUser.getId());
         if (chrRole == null) {
             return ReturnResult.create(500, "gogogo");
@@ -80,7 +74,6 @@ public class UserController {
 
     @GetMapping("/getAllUser")
     public Object getAllUser(String token) throws ResponseException {
-//        if (!tokenMap.get("token").equals(token)) {
         if (StringUtils.isBlank(token)) {
             return ReturnResult.create(null);
         }

@@ -70,9 +70,10 @@ public class GoodsController {
 //        return ReturnResult.create(goodsService.goodsList(page, chrGoods));
 //    }
     @PostMapping("/list")
-    public Object list(@RequestBody GoodsVo goodsVo) {ChrGoods chrGoods = new ChrGoods();
+    public Object list(@RequestBody GoodsVo goodsVo) {
+        ChrGoods chrGoods = new ChrGoods();
         BeanUtils.copyProperties(goodsVo, chrGoods);
-        PageVo pageVo=new PageVo(goodsVo.getPage(),goodsVo.getLimit());
+        PageVo pageVo = new PageVo(goodsVo.getPage(), goodsVo.getLimit());
         return ReturnResult.create(goodsService.goodsList(pageVo, chrGoods));
     }
 
@@ -105,10 +106,20 @@ public class GoodsController {
         return ReturnResult.create(null);
     }
 
-    //上传
+    //上传列表
     @PostMapping("/upload")
-    public Object upload(List<MultipartFile> fileList) {
+    public Object upload(List<MultipartFile> uploadFileList) {
 
+        for (MultipartFile multipartFile : uploadFileList) {
+            System.out.println(multipartFile.getOriginalFilename());
+        }
+        return ReturnResult.create(null);
+    }
+    //单独上传
+    @PostMapping("/uploadOnly")
+    public Object uploadOnly(MultipartFile uploadFile) {
+
+        System.out.println(uploadFile.getOriginalFilename());
         return ReturnResult.create(null);
     }
 
