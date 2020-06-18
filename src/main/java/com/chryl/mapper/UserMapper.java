@@ -13,6 +13,6 @@ import java.util.List;
 public interface UserMapper {
     ChrUser selectUserByUName(@Param("uName") String uName);
 
-    List<ChrUser> getAllUsers();
+    List<String> getAllUserName();
 
 }

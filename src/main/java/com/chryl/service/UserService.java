@@ -24,7 +24,6 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-
     public ChrUser selectUserByUName(String uName, String pass) throws ResponseException {
         ChrUser chrUser = userMapper.selectUserByUName(uName);
         if (chrUser == null || !pass.equals(chrUser.getPassword())) {
@@ -33,11 +32,12 @@ public class UserService {
         return chrUser;
     }
 
-    public List<ChrUser> getAllUsers() throws ResponseException {
-        List<ChrUser> chrUserList = userMapper.getAllUsers();
-        if (chrUserList == null || chrUserList.size() < 0) {
+    public List<String> getAllUserName() throws ResponseException {
+        List<String> usernameList = userMapper.getAllUserName();
+        if (usernameList == null || usernameList.size() < 0) {
             throw new ResponseException(EnumError.USER_NOT_EXISTS);
         }
-        return chrUserList;
+        return usernameList;
     }
+
 }

@@ -72,13 +72,10 @@ public class UserController {
         return ReturnResult.create(loginMap);
     }
 
-    @GetMapping("/getAllUser")
-    public Object getAllUser(String token) throws ResponseException {
-        if (StringUtils.isBlank(token)) {
-            return ReturnResult.create(null);
-        }
-        List<ChrUser> userList = userService.getAllUsers();
-        return ReturnResult.create(userList);
+    @GetMapping("/getAllUserName")
+    public Object getAllUserNoToekn() throws ResponseException {
+        List<String> usernameList = userService.getAllUserName();
+        return ReturnResult.create(usernameList);
     }
 
     @PostMapping("/logout")

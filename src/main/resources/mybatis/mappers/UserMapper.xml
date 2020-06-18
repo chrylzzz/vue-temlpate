@@ -17,7 +17,7 @@
         SELECT * FROM chr_user u WHERE u.username = #{uName}
     </select>
     <!-- 获取所有的用户列表 -->
-    <select id="getAllUsers" resultType="com.chryl.po.ChrUser">
+    <select id="getAllUserName" resultType="string">
         SELECT username FROM chr_user u
     </select>
 
