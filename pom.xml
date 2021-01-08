@@ -17,9 +17,53 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!-- oshi监控需要指定jna版本, 问题详见 https://github.com/oshi/oshi/issues/1040 -->
+        <jna.version>5.6.0</jna.version>
     </properties>
+
+    <!--<dependencyManagement>-->
+    <!--<dependencies>-->
+    <!--&lt;!&ndash; 服务器资源监测管理:oshi:获取系统信息,必须用版本管理 并加上jna的版本号 &ndash;&gt;-->
+    <!--<dependency>-->
+    <!--<groupId>com.github.oshi</groupId>-->
+    <!--<artifactId>oshi-core</artifactId>-->
+    <!--<version>5.3.6</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>net.java.dev.jna</groupId>-->
+    <!--<artifactId>jna</artifactId>-->
+    <!--<version>${jna.version}</version>-->
+    <!--</dependency>-->
+    <!--<dependency>-->
+    <!--<groupId>net.java.dev.jna</groupId>-->
+    <!--<artifactId>jna-platform</artifactId>-->
+    <!--<version>${jna.version}</version>-->
+    <!--</dependency>-->
+    <!--</dependencies>-->
+    <!--</dependencyManagement>-->
+
     <dependencies>
-        <!-- quartz -->
+        <!-- 服务器资源监测管理:oshi:获取系统信息,必须用版本管理 并加上jna的版本号 -->
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>5.3.6</version>
+        </dependency>
+
+        <!-- 解析客户端操作系统、浏览器信息 -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
+
+        <!-- quartz 定时任务管理-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -27,8 +71,9 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.5.0</version>
+            <version>5.5.2</version>
         </dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -106,14 +151,60 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <!-- excel工具 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+
+    <!-- 解决oshi-jar导入 -->
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aliyun nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
